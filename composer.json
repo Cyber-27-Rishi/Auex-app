@@ -1,0 +1,7 @@
+{
+    "name": "aurex/ecommerce",
+    "description": "Aurex Premium Streetwear eCommerce",
+    "require": {
+        "razorpay/razorpay": "^2.9"
+    }
+}

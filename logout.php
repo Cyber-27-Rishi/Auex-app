@@ -1,0 +1,9 @@
+<?php
+// ============================================
+// Aurex - Logout Handler
+// ============================================
+require_once 'includes/config.php';
+require_once 'includes/auth.php';
+
+logoutUser();
+redirect('index.php');
