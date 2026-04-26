@@ -3,6 +3,15 @@
    Dark Luxury Theme
    ============================================ */
 
+@font-face {
+    font-family: 'Nevan';
+    src: url('../NEVAN/Nevan RUS/Web Fonts/107a82b03afe661cb8ef268bd146c38c.woff2') format('woff2'),
+         url('../NEVAN/Nevan RUS/Web Fonts/107a82b03afe661cb8ef268bd146c38c.woff') format('woff'),
+         url('../NEVAN/Nevan RUS/Web Fonts/107a82b03afe661cb8ef268bd146c38c.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* ---------- CSS Variables ---------- */
 :root {
     --bg-primary: #0a0a0a;
@@ -32,7 +41,7 @@
     --radius-xl: 24px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    --font-logo: 'Incompleeta', sans-serif;
+    --font-logo: 'Nevan', sans-serif;
     --font-heading: 'Montserrat', sans-serif;
     --font-body: 'Montserrat', sans-serif;
     --font-button: 'Montserrat', sans-serif;

@@ -19,9 +19,13 @@ if (!isLoggedIn()) {
 // Handle Buy First - skip cart calculations for faster load
 if (isset($_GET['buy_now'])) {
     $buyNowId = (int)$_GET['buy_now'];
+    $buyNowSize = clean($_GET['size'] ?? 'M');
+    $buyNowQty  = max(1, (int)($_GET['qty'] ?? 1));
+
     $stmt = $pdo->prepare("SELECT id, name, price, discount, image, category FROM products WHERE id = :id AND is_active = 1 LIMIT 1");
     $stmt->execute([':id' => $buyNowId]);
     $product = $stmt->fetch();
+
     if ($product) {
         $discountedPrice = $product['price'] - ($product['price'] * $product['discount'] / 100);
         $cartItems = [
@@ -32,12 +36,18 @@ if (isset($_GET['buy_now'])) {
                 'original_price' => $product['price'],
                 'discount' => $product['discount'],
                 'image' => $product['image'],
-                'size' => 'M',
-                'quantity' => 1,
+                'size' => $buyNowSize,
+                'quantity' => $buyNowQty,
                 'category' => $product['category']
             ]
         ];
-        $cartTotal = $discountedPrice;
+
+        // SYNC: Put the "Buy Now" item into the session cart.
+        // This allows Razorpay scripts (razorpay-order.php, razorpay-verify.php)
+        // to correctly calculate the amount and save order items.
+        $_SESSION['cart'] = $cartItems;
+
+        $cartTotal = $discountedPrice * $buyNowQty;
         $shipping = 0;
         $codShippingFee = 50;
         $grandTotal = $cartTotal + $shipping;
@@ -260,6 +270,9 @@ require_once 'includes/header.php';
         </form>
     </div>
 </section>
+
+<!-- Razorpay Checkout Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <?php require_once 'includes/footer.php'; ?>
 

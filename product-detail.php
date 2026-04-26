@@ -181,9 +181,10 @@ $relatedProducts = getRelatedProducts($pdo, $product['category'], $product['id']
 </section>
 <?php endif; ?>
 
-<!-- Description Tab JS -->
+<!-- Description Tab & Buy Now Update JS -->
 <script>
     $(document).ready(function() {
+        // Handle tabs
         $('.desc-tab').on('click', function() {
             var target = $(this).data('tab');
             $('.desc-tab').removeClass('active');
@@ -191,6 +192,24 @@ $relatedProducts = getRelatedProducts($pdo, $product['category'], $product['id']
             $('.desc-pane').hide().removeClass('active');
             $('#' + target).show().addClass('active');
         });
+
+        // Handle Buy Now URL updates
+        function updateBuyNowLink() {
+            var size = $('.size-btn.active').data('size') || '';
+            var qty  = $('.qty-input').val() || 1;
+            var productId = '<?php echo $product['id']; ?>';
+            var newHref = 'checkout.php?buy_now=' + productId + '&size=' + encodeURIComponent(size) + '&qty=' + qty;
+            $('.btn-buy-now').attr('href', newHref);
+        }
+
+        // Listen for changes
+        $(document).on('click', '.size-btn, .qty-btn', function() {
+            setTimeout(updateBuyNowLink, 50); // Small delay to let other JS finish
+        });
+        $('.qty-input').on('change', updateBuyNowLink);
+
+        // Run once on load to set default size/qty
+        updateBuyNowLink();
     });
 </script>
 
